@@ -1,26 +1,28 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import JSONEditor from './components/JSONEditor';
+import Sandbox from './components/Sandbox';
+import { connect } from 'react-redux';
+import { createStore } from 'redux';
+import reducer from './redux';
 
-function App() {
+const store = createStore(reducer);
+
+function App(props) {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <JSONEditor editor="source" path="source"/>
+      <JSONEditor editor="output" path="output"/>
+      {Boolean(Reflect.ownKeys(props.mappings).length) && <Sandbox/>}
     </div>
   );
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  return {
+    ...state
+  };
+}
+
+export default connect(mapStateToProps)(App);
